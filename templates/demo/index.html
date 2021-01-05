@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+    <link href="{% static 'tabulator/css/tabulator.min.css' %}" rel="stylesheet">
+    <title>Demo</title>
+</head>
+<body>
+
+<div id="example-table"></div>
+
+<script type="text/javascript" src="{% static 'tabulator/js/tabulator.min.js' %}"></script>
+<script>
+
+
+    const table = new Tabulator("#example-table", {
+        ajaxURL: "{% url 'get_records' %}", //ajax URL
+        pagination:"local",
+        paginationSize:10,
+        columns: [
+            {
+                title: "เวลา", field: "epoch_start", width: 200, headerSort: false,
+                formatter: function (cell, formatterParams, onRendered) {
+                    var date_time = new Date(cell.getValue());
+                    return date_time.toLocaleString(); //return the contents of the cell;
+                },
+            },
+            {title: "ทะเบียน", field: "best_plate_number", headerSort: false, width: 100},
+            {
+                title: "จังหวัด", field: "best_region", headerSort: false, width: 200,
+                formatter: function (cell, formatterParams, onRendered) {
+                    return province_dict[cell.getValue()]; //return the contents of the cell;
+                },
+            },
+            {
+                title: "Confidence",
+                field: "best_confidence",
+                hozAlign: "center",
+                headerSort: false,
+                width: 100,
+                formatter: function (cell, formatterParams, onRendered) {
+                    return Math.round(cell.getValue()) + "%"; //return the contents of the cell;
+                },
+            },
+            {
+                title: "รูปป้าย",
+                headerSort: false,
+                field: "best_plate.plate_crop_jpeg",
+                formatter: function (cell, formatterParams, onRendered) {
+                    const image = new Image();
+
+                    image.src = "data:image/jpeg;base64," + cell.getValue();
+                    image.style.height = 70 + "px";
+
+                    return image; //return the contents of the cell;
+                },
+            },
+            {
+                title: "รูปรถ",
+                headerSort: false,
+                field: "vehicle_crop_jpeg",
+                formatter: function (cell, formatterParams, onRendered) {
+                    const image = new Image();
+                    image.src = "data:image/jpeg;base64," + cell.getValue()
+                    image.style.height = 70 + "px";
+
+                    return image; //return the contents of the cell;
+                },
+            }
+        ],
+    });
+
+    const province_dict = {
+        "th-37": "Amnat Charoen",
+        "th-15": "Ang Thong",
+        "th-14": "Ayutthaya",
+        "th-10": "Bangkok",
+        "th-10b": "Bangkok",
+        "th-10c": "Bangkok",
+        "th-99": "Batong",
+        "th-38": "Bueng Kan",
+        "th-31": "Buri Ram",
+        "th-24": "Chachoengsao",
+        "th-18": "Chai Nat",
+        "th-36": "Chaiyaphum",
+        "th-22": "Chanthaburi",
+        "th-50": "Chiang Mai",
+        "th-57": "Chiang Rai",
+        "th-20": "Chon Buri",
+        "th-86": "Chumphon",
+        "th-46": "Kalasin",
+        "th-62": "Kamphaeng Phet",
+        "th-71": "Kanchanaburi",
+        "th-40": "Khon Kaen",
+        "th-81": "Krabi",
+        "th-52": "Lampang",
+        "th-51": "Lamphun",
+        "th-42": "Loei",
+        "th-16": "Lop Buri",
+        "th-58": "Mae Hong Son",
+        "th-44": "Maha Sarakham",
+        "th-49": "Mukdahan",
+        "th-26": "Nakhon Nayok",
+        "th-73": "Nakhon Pathom",
+        "th-48": "Nakhon Phanom",
+        "th-30": "Nakhon Ratchasima",
+        "th-60": "Nakhon Sawan",
+        "th-80": "Nakhon Si Thammarat",
+        "th-55": "Nan",
+        "th-96": "Narathiwat",
+        "th-39": "Nong Bua Lam Phu",
+        "th-43": "Nong Khai",
+        "th-12": "Nonthaburi",
+        "th-13": "Pathum Thani",
+        "th-94": "Pattani",
+        "th-82": "Phangnga",
+        "th-93": "Phatthalung",
+        "th-56": "Phayao",
+        "th-67": "Phetchabun",
+        "th-76": "Phetchaburi",
+        "th-66": "Phichit",
+        "th-65": "Phitsanulok",
+        "th-54": "Phrae",
+        "th-83": "Phuket",
+        "th-25": "Prachin Buri",
+        "th-77": "Prachuap Khiri Khan",
+        "th-85": "Ranong",
+        "th-70": "Ratchaburi",
+        "th-21": "Rayong",
+        "th-45": "Roi Et",
+        "th-27": "Sa Kaeo",
+        "th-47": "Sakon Nakhon",
+        "th-11": "Samut Prakan",
+        "th-74": "Samut Sakhon",
+        "th-75": "Samut Songkhram",
+        "th-19": "Saraburi",
+        "th-91": "Satun",
+        "th-17": "Sing Buri",
+        "th-33": "Sisaket",
+        "th-90": "Songkhla",
+        "th-64": "Sukhothai",
+        "th-72": "Suphan Buri",
+        "th-84": "Surat Thani",
+        "th-32": "Surin",
+        "th-63": "Tak",
+        "th-92": "Trang",
+        "th-23": "Trat",
+        "th-34": "Ubon Ratchathani",
+        "th-41": "Udon Thani",
+        "th-61": "Uthai Thani",
+        "th-53": "Uttaradit",
+        "th-95": "Yala",
+        "th-35": "Yasothon"
+    }
+
+    function update() {
+        fetch('{% url 'get_new_record' %}')
+            .then(res => res.json())
+            .then((out) => {
+                table.addData([out], true);
+            });
+        setTimeout(update, 5000);
+    }
+
+    setTimeout(update, 1000);
+
+</script>
+</body>
+</html>
