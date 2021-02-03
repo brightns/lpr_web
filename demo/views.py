@@ -53,17 +53,18 @@ def add_record(request):
     current_plate_number = data.get('best_plate_number', None)
     current_region = data.get('best_region', None)
 
+    is_duplicated = False
     # get previous record
     previous_record = Record.objects.last()
-    previous_record_json = previous_record.json
-    previous_record_plate_number = previous_record_json.get('best_plate_number', None)
-    previous_region = previous_record_json.get('best_region', None)
 
-    is_duplicated = False
-
-    if previous_record_plate_number == current_plate_number and previous_region == current_region:
-        is_duplicated = True
-        print("duplicated")
+    if previous_record is not None:
+        previous_record_json = previous_record.json
+        previous_record_plate_number = previous_record_json.get('best_plate_number', None)
+        previous_region = previous_record_json.get('best_region', None)
+    
+        if previous_record_plate_number == current_plate_number and previous_region == current_region:
+            is_duplicated = True
+            print("duplicated")
 
     if data_type == "alpr_group" and not is_duplicated:
         print("saving json")
