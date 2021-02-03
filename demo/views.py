@@ -61,7 +61,7 @@ def add_record(request):
         previous_record_json = previous_record.json
         previous_record_plate_number = previous_record_json.get('best_plate_number', None)
         previous_region = previous_record_json.get('best_region', None)
-    
+
         if previous_record_plate_number == current_plate_number and previous_region == current_region:
             is_duplicated = True
             print("duplicated")

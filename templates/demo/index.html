@@ -37,8 +37,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 },
             },
             {
-                title: "Confidence",
+                title: "Confidence Plate",
                 field: "best_confidence",
+                hozAlign: "center",
+                headerSort: false,
+                width: 100,
+                formatter: function (cell, formatterParams, onRendered) {
+                    return Math.round(cell.getValue()) + "%"; //return the contents of the cell;
+                },
+            },
+                        {
+                title: "Confidence Region",
+                field: "best_region_confidence",
                 hozAlign: "center",
                 headerSort: false,
                 width: 100,
